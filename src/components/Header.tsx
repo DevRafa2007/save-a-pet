@@ -1,13 +1,33 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Heart } from 'lucide-react';
+import { Menu, X, Heart, LogOut, User } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
+
+  const handleAuthAction = (action: 'login' | 'register') => {
+    if (user) {
+      if (action === 'login') {
+        navigate('/adotar');
+      } else {
+        navigate('/cadastrar');
+      }
+    } else {
+      navigate('/auth');
+    }
+  };
 
   const navLinks = [
     { to: '/sobre', label: 'Sobre' },
@@ -46,14 +66,37 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* CTA Buttons - Desktop */}
+          {/* CTA Buttons and User Menu - Desktop */}
           <div className="hidden lg:flex items-center gap-4">
-            <Button variant="outline" asChild className="transition-all duration-300 hover:shadow-medium">
-              <Link to="/adotar">Adote Agora</Link>
-            </Button>
-            <Button asChild className="transition-all duration-300 hover:shadow-medium hover:scale-105">
-              <Link to="/cadastrar">Cadastrar Pet</Link>
-            </Button>
+            {user ? (
+              <>
+                <div className="flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-lg">
+                  <User className="h-4 w-4 text-primary" />
+                  <span className="text-sm text-primary">Olá, {user.user_metadata?.full_name || user.email}</span>
+                </div>
+                <Button variant="outline" onClick={() => handleAuthAction('login')} className="transition-all duration-300 hover:shadow-medium">
+                  Adotar Pet
+                </Button>
+                <Button onClick={() => handleAuthAction('register')} className="transition-all duration-300 hover:shadow-medium hover:scale-105">
+                  Cadastrar Pet
+                </Button>
+                <Button variant="ghost" size="icon" onClick={handleSignOut} className="transition-all duration-300">
+                  <LogOut className="h-4 w-4" />
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="outline" onClick={() => handleAuthAction('login')} className="transition-all duration-300 hover:shadow-medium">
+                  Adote Agora
+                </Button>
+                <Button onClick={() => handleAuthAction('register')} className="transition-all duration-300 hover:shadow-medium hover:scale-105">
+                  Cadastrar Pet
+                </Button>
+                <Button variant="ghost" asChild>
+                  <Link to="/auth">Entrar</Link>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -84,12 +127,36 @@ const Header = () => {
                 </Link>
               ))}
               <div className="flex flex-col gap-3 mt-4">
-                <Button variant="outline" asChild>
-                  <Link to="/adotar" onClick={() => setIsMenuOpen(false)}>Adote Agora</Link>
-                </Button>
-                <Button asChild>
-                  <Link to="/cadastrar" onClick={() => setIsMenuOpen(false)}>Cadastrar Pet</Link>
-                </Button>
+                {user ? (
+                  <>
+                    <div className="flex items-center gap-2 px-3 py-2 bg-primary/10 rounded-lg">
+                      <User className="h-4 w-4 text-primary" />
+                      <span className="text-sm text-primary">Olá, {user.user_metadata?.full_name || user.email}</span>
+                    </div>
+                    <Button variant="outline" onClick={() => { handleAuthAction('login'); setIsMenuOpen(false); }}>
+                      Adotar Pet
+                    </Button>
+                    <Button onClick={() => { handleAuthAction('register'); setIsMenuOpen(false); }}>
+                      Cadastrar Pet
+                    </Button>
+                    <Button variant="ghost" onClick={() => { handleSignOut(); setIsMenuOpen(false); }}>
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sair
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button variant="outline" onClick={() => { handleAuthAction('login'); setIsMenuOpen(false); }}>
+                      Adote Agora
+                    </Button>
+                    <Button onClick={() => { handleAuthAction('register'); setIsMenuOpen(false); }}>
+                      Cadastrar Pet
+                    </Button>
+                    <Button variant="ghost" asChild>
+                      <Link to="/auth" onClick={() => setIsMenuOpen(false)}>Entrar</Link>
+                    </Button>
+                  </>
+                )}
               </div>
             </nav>
           </div>
