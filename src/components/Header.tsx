@@ -39,12 +39,17 @@ const Header = () => {
     { to: '/contato', label: 'Contato' },
   ];
 
+  // Função utilitária para scrollar ao topo
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  };
+
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border shadow-soft">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 transition-all duration-300 hover:scale-105">
+          <Link to="/" className="flex items-center gap-2 transition-all duration-300 hover:scale-105" onClick={scrollToTop}>
             <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center">
               <Heart className="w-6 h-6 text-white" fill="currentColor" />
             </div>
@@ -57,6 +62,7 @@ const Header = () => {
               <Link
                 key={link.to}
                 to={link.to}
+                onClick={scrollToTop}
                 className={`font-medium transition-all duration-300 hover:text-primary relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left ${
                   isActive(link.to) ? 'text-primary after:scale-x-100' : 'text-muted-foreground'
                 }`}
@@ -116,7 +122,7 @@ const Header = () => {
                 <Link
                   key={link.to}
                   to={link.to}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => { scrollToTop(); setIsMenuOpen(false); }}
                   className={`font-medium py-2 px-4 rounded-lg transition-colors ${
                     isActive(link.to) 
                       ? 'text-primary bg-primary/10' 
