@@ -1,73 +1,137 @@
-# Welcome to your Lovable project
+# 🐾 Save a Pet
 
-## Project info
+Plataforma moderna para adoção responsável de pets, conectando animais que precisam de um lar a famílias amorosas. Feita com React, Vite, TypeScript, Supabase, Tailwind CSS e shadcn-ui.
 
-**URL**: https://lovable.dev/projects/13220a7e-45b5-44b6-9b94-7619f49aaa0a
+---
 
-## How can I edit this code?
+<p align="center">
+  <img src="./public/placeholder.svg" alt="Save a Pet" width="200" />
+</p>
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## ✨ Visão Geral
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/13220a7e-45b5-44b6-9b94-7619f49aaa0a) and start prompting.
+O **Save a Pet** é uma plataforma completa para facilitar a adoção de cães e gatos, promovendo o bem-estar animal e a responsabilidade social. Permite que usuários encontrem pets para adoção, cadastrem animais, tirem dúvidas, leiam conteúdos educativos e se conectem de forma segura.
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## 🚀 Funcionalidades
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- **Catálogo de Pets**: Busque, filtre e visualize detalhes de cães e gatos disponíveis para adoção.
+- **Cadastro de Animais**: Cadastre pets para adoção com fotos, histórico, temperamento e necessidades especiais.
+- **Autenticação Segura**: Login, cadastro e gerenciamento de sessão via Supabase Auth.
+- **Perfil do Usuário**: Gerencie informações pessoais e acompanhe pets cadastrados/adotados.
+- **Chat Seguro**: Comunicação entre adotantes e responsáveis pelo pet.
+- **Blog Educativo**: Conteúdos sobre adoção, cuidados, dicas e responsabilidade.
+- **FAQ e Contato**: Tire dúvidas frequentes e envie mensagens para a equipe.
+- **Design Responsivo**: Interface moderna, acessível e adaptada para dispositivos móveis.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## 🏗️ Arquitetura & Tecnologias
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- **Frontend**: [React](https://react.dev/), [Vite](https://vitejs.dev/), [TypeScript](https://www.typescriptlang.org/)
+- **UI/UX**: [Tailwind CSS](https://tailwindcss.com/), [shadcn-ui](https://ui.shadcn.com/), [Lucide Icons](https://lucide.dev/)
+- **Backend as a Service**: [Supabase](https://supabase.com/) (Auth, Database, Storage)
+- **Gerenciamento de Estado**: React Context, React Query
+- **Validação de Formulários**: React Hook Form, Zod
+- **Outros**: ESLint, PostCSS, Vite Plugins
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+---
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 📁 Estrutura de Pastas
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+src/
+  components/        # Componentes reutilizáveis (UI, Header, Footer, etc)
+  hooks/             # Hooks customizados (ex: useAuth, useToast)
+  integrations/      # Integração com Supabase (client, types)
+  lib/               # Utilitários
+  pages/             # Páginas principais (Adotar, Cadastrar, FAQ, etc)
+  assets/            # Imagens e mídias
+public/              # Arquivos estáticos
+supabase/            # Configuração e migrações do banco
 ```
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🛠️ Como rodar o projeto localmente
 
-**Use GitHub Codespaces**
+1. **Clone o repositório:**
+   ```sh
+   git clone <URL_DO_REPO>
+   cd save-a-pet
+   ```
+2. **Instale as dependências:**
+   ```sh
+   npm install
+   ```
+3. **Configure o Supabase:**
+   - Crie um projeto no [Supabase](https://supabase.com/)
+   - Configure as variáveis de ambiente (`SUPABASE_URL`, `SUPABASE_ANON_KEY`)
+   - Execute as migrações SQL em `supabase/migrations/`
+4. **Inicie o servidor de desenvolvimento:**
+   ```sh
+   npm run dev
+   ```
+5. **Acesse:**
+   - [http://localhost:5173](http://localhost:5173)
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
+## 🌐 Deploy
 
-This project is built with:
+- Deploy automático via [Lovable](https://lovable.dev/) ou manual em plataformas como Vercel, Netlify, Render, etc.
+- Para domínio próprio, configure em: `Project > Settings > Domains` no Lovable.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+---
 
-## How can I deploy this project?
+## 🔒 Segurança & Boas Práticas
 
-Simply open [Lovable](https://lovable.dev/projects/13220a7e-45b5-44b6-9b94-7619f49aaa0a) and click on Share -> Publish.
+- Autenticação e autorização via Supabase (RLS e Policies SQL)
+- Dados sensíveis protegidos por triggers e policies no banco
+- Validação de formulários e sanitização de dados
+- Código modular, tipado e com linting
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
+## 🤝 Como contribuir
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+1. Faça um fork do projeto
+2. Crie uma branch: `git checkout -b minha-feature`
+3. Commit suas alterações: `git commit -m 'feat: minha feature'`
+4. Push para o fork: `git push origin minha-feature`
+5. Abra um Pull Request
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+---
+
+## ❓ FAQ
+
+- **Adoção tem custo?**
+  - Não, mas pode haver taxa simbólica para vacinas/castração.
+- **Posso cadastrar qualquer pet?**
+  - Sim, desde que seja para adoção responsável.
+- **Como funciona o chat?**
+  - Após interesse, o contato é feito via chat seguro na plataforma.
+- **É seguro?**
+  - Sim! Usamos autenticação, políticas de acesso e monitoramento.
+
+---
+
+## 📄 Licença
+
+Este projeto é open-source sob a licença MIT.
+
+---
+
+## 👨‍💻 Créditos & Contato
+
+- Desenvolvido por [Rafael Fonseca](mailto:rafael@email.com)
+- Design e UI: shadcn-ui, Tailwind CSS
+- Backend: Supabase
+- Dúvidas? Use a página de [Contato](./src/pages/Contato.tsx) ou envie um e-mail.
+
+<p align="center">
+  <b>Save a Pet — Conectando corações, transformando vidas! 🐶🐱</b>
+</p>
