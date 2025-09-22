@@ -12,8 +12,8 @@ import sampleCat from '@/assets/sample-cat.jpg';
 
 const Adotar = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedType, setSelectedType] = useState('');
-  const [selectedAge, setSelectedAge] = useState('');
+  const [selectedType, setSelectedType] = useState('all');
+  const [selectedAge, setSelectedAge] = useState('all');
 
   const pets = [
     {
@@ -87,8 +87,8 @@ const Adotar = () => {
       pet.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       pet.breed.toLowerCase().includes(searchTerm.toLowerCase())
     ) &&
-    (selectedType === '' || pet.type === selectedType) &&
-    (selectedAge === '' || pet.age.includes(selectedAge));
+    (selectedType === 'all' || pet.type === selectedType) &&
+    (selectedAge === 'all' || pet.age.includes(selectedAge));
   });
 
   return (
@@ -129,7 +129,7 @@ const Adotar = () => {
                 <SelectValue placeholder="Tipo de animal" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos os tipos</SelectItem>
+                <SelectItem value="all">Todos os tipos</SelectItem>
                 <SelectItem value="Cão">Cães</SelectItem>
                 <SelectItem value="Gato">Gatos</SelectItem>
               </SelectContent>
@@ -140,7 +140,7 @@ const Adotar = () => {
                 <SelectValue placeholder="Idade" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todas as idades</SelectItem>
+                <SelectItem value="all">Todas as idades</SelectItem>
                 <SelectItem value="meses">Filhotes</SelectItem>
                 <SelectItem value="1">1 ano</SelectItem>
                 <SelectItem value="2">2 anos</SelectItem>
@@ -242,8 +242,8 @@ const Adotar = () => {
               </div>
               <Button variant="outline" onClick={() => {
                 setSearchTerm('');
-                setSelectedType('');
-                setSelectedAge('');
+                setSelectedType('all');
+                setSelectedAge('all');
               }}>
                 Limpar Filtros
               </Button>
