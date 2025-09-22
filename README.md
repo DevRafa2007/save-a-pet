@@ -127,7 +127,7 @@ Este projeto é open-source sob a licença MIT.
 
 ## 👨‍💻 Créditos & Contato
 
-- Desenvolvido por [Rafael Fonseca](mailto:rafael@email.com)
+- Desenvolvido por [Rafael Fonseca](mailto:rafael@email.com), [Davi Ramalho](mailto:daviramalho06@gmail.com), [Joao Freire](mailto:joaognfreire@gmail.com)
 - Design e UI: shadcn-ui, Tailwind CSS
 - Backend: Supabase
 - Dúvidas? Use a página de [Contato](./src/pages/Contato.tsx) ou envie um e-mail.
