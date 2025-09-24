@@ -182,18 +182,18 @@ const Contato = () => {
                   {
                     icon: Phone,
                     title: 'Telefone',
-                    info: '(11) 99999-9999',
+                    info: '(83) 99999-9999',
                     description: 'Seg à Sex, 9h às 18h',
                     action: 'Ligar Agora',
-                    href: 'tel:+5511999999999'
+                    href: 'tel:+5583999999999'
                   },
                   {
                     icon: MessageCircle,
                     title: 'WhatsApp',
-                    info: '(11) 99999-9999',
+                    info: '(83) 99999-9999',
                     description: 'Chat rápido e direto',
                     action: 'Abrir WhatsApp',
-                    href: 'https://wa.me/5511999999999'
+                    href: 'https://wa.me/5583999999999'
                   },
                 ].map((contact, index) => (
                   <Card key={index} className="border-0 shadow-soft hover:shadow-medium transition-all duration-300 bg-card/50 backdrop-blur">
@@ -233,7 +233,7 @@ const Contato = () => {
                     <p className="font-medium">Save a Pet - Sede</p>
                     <p className="text-muted-foreground">
                       Rua dos Pets, 123<br />
-                      Vila Animal - São Paulo, SP<br />
+                      Vila Animal - João Pessoa, PB<br />
                       CEP: 01234-567
                     </p>
                   </div>
@@ -276,7 +276,7 @@ const Contato = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" variant="secondary">
                 <Phone className="w-5 h-5 mr-2" />
-                Emergência: (11) 99999-9999
+                Emergência: (83) 99999-9999
               </Button>
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
                 <MessageCircle className="w-5 h-5 mr-2" />
