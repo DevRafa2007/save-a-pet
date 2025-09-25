@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Heart, LogOut, User } from 'lucide-react';
+import { Menu, X, Heart, LogOut, User, PawPrint } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 
 const Header = () => {
@@ -18,28 +18,24 @@ const Header = () => {
   };
 
   const handleAuthAction = (action: 'login' | 'register') => {
-    if (user) {
-      if (action === 'login') {
-        navigate('/adotar');
-      } else {
-        navigate('/cadastrar');
-      }
+    if (action === 'login') {
+      navigate('/adotar');
     } else {
-      navigate('/auth');
+      navigate('/cadastrar');
     }
   };
 
-  const navLinks = [
+  const baseNavLinks = [
     { to: '/sobre', label: 'Sobre' },
-    { to: '/adotar', label: 'Adote um Pet' },
     { to: '/como-funciona', label: 'Como Funciona' },
-    { to: '/cadastrar', label: 'Cadastrar Pet' },
     { to: '/blog', label: 'Blog' },
     { to: '/faq', label: 'FAQ' },
     { to: '/contato', label: 'Contato' },
   ];
 
-  // Função utilitária para scrollar ao topo
+  const userNavLinks = user ? [{ to: '/meus-pets', label: 'Meus Pets' }] : [];
+  const navLinks = [...userNavLinks, ...baseNavLinks];
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   };
@@ -76,30 +72,25 @@ const Header = () => {
           <div className="hidden lg:flex items-center gap-4">
             {user ? (
               <>
-                <div className="flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-lg">
-                  <User className="h-4 w-4 text-primary" />
-                  <span className="text-sm text-primary">Olá, {user.user_metadata?.full_name || user.email}</span>
-                </div>
                 <Button variant="outline" onClick={() => handleAuthAction('login')} className="transition-all duration-300 hover:shadow-medium">
+                  <Heart className="w-4 h-4 mr-2" />
                   Adotar Pet
                 </Button>
                 <Button onClick={() => handleAuthAction('register')} className="transition-all duration-300 hover:shadow-medium hover:scale-105">
+                  <PawPrint className="w-4 h-4 mr-2" />
                   Cadastrar Pet
                 </Button>
-                <Button variant="ghost" size="icon" onClick={handleSignOut} className="transition-all duration-300">
-                  <LogOut className="h-4 w-4" />
+                <Button variant="ghost" size="icon" onClick={handleSignOut} title="Sair" className="transition-all duration-300">
+                  <LogOut className="h-5 w-5" />
                 </Button>
               </>
             ) : (
               <>
-                <Button variant="outline" onClick={() => handleAuthAction('login')} className="transition-all duration-300 hover:shadow-medium">
-                  Adote Agora
+                <Button variant="outline" onClick={() => navigate('/auth')} className="transition-all duration-300 hover:shadow-medium">
+                  Entrar
                 </Button>
-                <Button onClick={() => handleAuthAction('register')} className="transition-all duration-300 hover:shadow-medium hover:scale-105">
-                  Cadastrar Pet
-                </Button>
-                <Button variant="ghost" asChild>
-                  <Link to="/auth">Entrar</Link>
+                <Button onClick={() => navigate('/auth')} className="transition-all duration-300 hover:shadow-medium hover:scale-105">
+                  Criar Conta
                 </Button>
               </>
             )}
@@ -132,17 +123,15 @@ const Header = () => {
                   {link.label}
                 </Link>
               ))}
-              <div className="flex flex-col gap-3 mt-4">
+              <div className="flex flex-col gap-3 mt-4 border-t pt-4">
                 {user ? (
                   <>
-                    <div className="flex items-center gap-2 px-3 py-2 bg-primary/10 rounded-lg">
-                      <User className="h-4 w-4 text-primary" />
-                      <span className="text-sm text-primary">Olá, {user.user_metadata?.full_name || user.email}</span>
-                    </div>
-                    <Button variant="outline" onClick={() => { handleAuthAction('login'); setIsMenuOpen(false); }}>
+                     <Button variant="outline" onClick={() => { handleAuthAction('login'); setIsMenuOpen(false); }}>
+                      <Heart className="w-4 h-4 mr-2" />
                       Adotar Pet
                     </Button>
                     <Button onClick={() => { handleAuthAction('register'); setIsMenuOpen(false); }}>
+                      <PawPrint className="w-4 h-4 mr-2" />
                       Cadastrar Pet
                     </Button>
                     <Button variant="ghost" onClick={() => { handleSignOut(); setIsMenuOpen(false); }}>
@@ -152,14 +141,11 @@ const Header = () => {
                   </>
                 ) : (
                   <>
-                    <Button variant="outline" onClick={() => { handleAuthAction('login'); setIsMenuOpen(false); }}>
-                      Adote Agora
+                    <Button variant="outline" onClick={() => { navigate('/auth'); setIsMenuOpen(false); }}>
+                      Entrar
                     </Button>
-                    <Button onClick={() => { handleAuthAction('register'); setIsMenuOpen(false); }}>
-                      Cadastrar Pet
-                    </Button>
-                    <Button variant="ghost" asChild>
-                      <Link to="/auth" onClick={() => setIsMenuOpen(false)}>Entrar</Link>
+                    <Button onClick={() => { navigate('/auth'); setIsMenuOpen(false); }}>
+                      Criar Conta
                     </Button>
                   </>
                 )}

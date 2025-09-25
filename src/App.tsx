@@ -18,6 +18,8 @@ import PetDetails from "./pages/PetDetails";
 import Chat from "./pages/Chat";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "@/components/ScrollToTop";
+import MeusPets from "./pages/MeusPets";
+import EditarPet from "./pages/EditarPet";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +44,16 @@ const App = () => (
             <Route path="/cadastrar" element={
               <ProtectedRoute>
                 <Cadastrar />
+              </ProtectedRoute>
+            } />
+            <Route path="/meus-pets" element={
+              <ProtectedRoute>
+                <MeusPets />
+              </ProtectedRoute>
+            } />
+            <Route path="/pet/editar/:id" element={
+              <ProtectedRoute>
+                <EditarPet />
               </ProtectedRoute>
             } />
             <Route path="/blog" element={<Blog />} />

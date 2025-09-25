@@ -49,9 +49,9 @@ const ComoFunciona = () => {
     },
     {
       icon: Shield,
-      title: 'Aguarde Aprovação',
-      description: 'Nossa equipe verifica as informações e aprova o anúncio em até 24 horas.',
-      details: ['Verificação das informações', 'Validação das fotos', 'Aprovação do perfil', 'Publicação do anúncio']
+      title: 'Publicação Imediata',
+      description: 'Seu anúncio é publicado instantaneamente e já fica visível para milhares de adotantes.',
+      details: ['Anúncio ativo na hora', 'Visibilidade imediata', 'Edição fácil pelo perfil', 'Pronto para receber contatos']
     },
     {
       icon: MessageCircle,

@@ -1,15 +1,47 @@
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Heart, Users, Shield, Star, ArrowRight, Sparkles } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import heroImage from '@/assets/hero-pets.jpg';
-import sampleDog from '@/assets/sample-dog.jpg';
-import sampleCat from '@/assets/sample-cat.jpg';
 import testimonialFamily from '@/assets/testimonial-family.jpg';
+import { supabase } from '@/integrations/supabase/client';
+
+interface Pet {
+  id: string;
+  name: string;
+  breed: string;
+  age: string;
+  description: string;
+  image_url: string;
+}
 
 const Index = () => {
+  const navigate = useNavigate();
+  const [featuredPets, setFeaturedPets] = useState<Pet[]>([]);
+
+  useEffect(() => {
+    const fetchFeaturedPets = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('pets')
+          .select('id, name, breed, age, description, image_url')
+          .eq('is_available', true)
+          .order('created_at', { ascending: false })
+          .limit(2);
+
+        if (error) throw error;
+        setFeaturedPets(data || []);
+      } catch (error) {
+        console.error('Error fetching featured pets:', error);
+      }
+    };
+
+    fetchFeaturedPets();
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -96,26 +128,11 @@ const Index = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                name: 'Buddy',
-                type: 'Golden Retriever',
-                age: '2 anos',
-                description: 'Muito carinhoso e adora crianças',
-                image: sampleDog
-              },
-              {
-                name: 'Luna',
-                type: 'Gato Laranja',
-                age: '1 ano',
-                description: 'Independente mas muito carinhosa',
-                image: sampleCat
-              },
-            ].map((pet, index) => (
-              <Card key={index} className="group overflow-hidden border-0 shadow-soft hover:shadow-medium transition-all duration-300 hover:scale-105 bg-card/50 backdrop-blur">
+            {featuredPets.map((pet) => (
+              <Card key={pet.id} className="group overflow-hidden border-0 shadow-soft hover:shadow-medium transition-all duration-300 hover:scale-105 bg-card/50 backdrop-blur">
                 <div className="aspect-square overflow-hidden">
                   <img 
-                    src={pet.image} 
+                    src={pet.image_url || ''} 
                     alt={pet.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />
@@ -123,26 +140,31 @@ const Index = () => {
                 <CardContent className="p-6 space-y-4">
                   <div>
                     <h3 className="text-xl font-semibold">{pet.name}</h3>
-                    <p className="text-primary font-medium">{pet.type} • {pet.age}</p>
+                    <p className="text-primary font-medium">{pet.breed} • {pet.age}</p>
                   </div>
-                  <p className="text-muted-foreground">{pet.description}</p>
-                  <Button className="w-full group/btn">
-                    Conhecer {pet.name}
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                  <p className="text-muted-foreground line-clamp-2">{pet.description}</p>
+                  <Button asChild className="w-full group/btn">
+                    <Link to={`/pet/${pet.id}`}>
+                      Conhecer {pet.name}
+                      <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                    </Link>
                   </Button>
                 </CardContent>
               </Card>
             ))}
             
-            <Card className="group flex items-center justify-center border-2 border-dashed border-primary/30 hover:border-primary/60 hover:bg-primary/5 transition-all duration-300 cursor-pointer">
-              <CardContent className="text-center p-8 space-y-4">
+            <Card 
+              onClick={() => navigate('/adotar')}
+              className="group flex items-center justify-center border-2 border-dashed border-primary/30 hover:border-primary/60 hover:bg-primary/5 transition-all duration-300 cursor-pointer"
+            >
+              <CardContent className="text-center p-8 space-y-4 flex flex-col justify-center items-center h-full">
                 <Heart className="w-12 h-12 text-primary mx-auto" />
                 <div>
                   <h3 className="text-xl font-semibold">Ver Todos os Pets</h3>
                   <p className="text-muted-foreground">Descubra mais amiguinhos esperando por você</p>
                 </div>
-                <Button variant="outline" asChild>
-                  <Link to="/adotar">Ver Mais Pets</Link>
+                <Button variant="outline">
+                  Ver Mais Pets
                 </Button>
               </CardContent>
             </Card>

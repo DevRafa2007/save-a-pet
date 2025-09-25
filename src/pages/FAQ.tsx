@@ -38,7 +38,7 @@ const FAQ = () => {
       questions: [
         {
           question: 'Como cadastro meu pet para adoção?',
-          answer: 'Acesse a seção "Cadastrar Pet", preencha o formulário completo com informações detalhadas sobre seu pet, adicione fotos de qualidade e aguarde nossa aprovação em até 24 horas.'
+          answer: 'Acesse a seção "Cadastrar Pet", preencha o formulário completo com informações detalhadas sobre seu pet e adicione fotos de qualidade. O anúncio fica disponível na plataforma imediatamente após o envio!'
         },
         {
           question: 'Quantas fotos devo incluir?',
@@ -46,7 +46,7 @@ const FAQ = () => {
         },
         {
           question: 'Posso editar as informações depois?',
-          answer: 'Sim, você pode atualizar as informações do seu pet a qualquer momento através do seu perfil. Mudanças significativas passarão por nova aprovação.'
+          answer: 'Sim, você pode atualizar as informações do seu pet a qualquer momento através do seu perfil de usuário.'
         },
         {
           question: 'O que acontece se eu mudar de ideia?',
@@ -54,7 +54,7 @@ const FAQ = () => {
         },
         {
           question: 'Vocês verificam as informações?',
-          answer: 'Sim, nossa equipe revisa todos os cadastros para garantir a veracidade das informações e a qualidade dos anúncios. Isso protege tanto os pets quanto os adotantes.'
+          answer: 'Sim, nossa equipe monitora os anúncios para garantir a segurança e a veracidade das informações. Temos um sistema de denúncias para qualquer comportamento inadequado, protegendo pets e adotantes.'
         }
       ]
     },
