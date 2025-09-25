@@ -78,7 +78,7 @@ const Auth = () => {
         title: "Login realizado!",
         description: "Bem-vindo de volta!",
       });
-      navigate('/');
+      navigate('/adotar');
     } catch (error: any) {
       toast({
         title: "Erro no login",

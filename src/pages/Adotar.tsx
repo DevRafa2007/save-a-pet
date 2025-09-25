@@ -1,86 +1,59 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Heart, Search, Filter, MapPin, Calendar, MessageCircle } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import sampleDog from '@/assets/sample-dog.jpg';
-import sampleCat from '@/assets/sample-cat.jpg';
+
+interface Pet {
+  id: string;
+  name: string;
+  type: string;
+  breed: string;
+  age: string;
+  gender: string;
+  size: string;
+  temperament: string[];
+  location: string;
+  description: string;
+  image_url: string;
+  vaccinated: boolean;
+  neutered: boolean;
+}
 
 const Adotar = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState('all');
   const [selectedAge, setSelectedAge] = useState('all');
+  const [pets, setPets] = useState<Pet[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const pets = [
-    {
-      id: 1,
-      name: 'Buddy',
-      type: 'Cão',
-      breed: 'Golden Retriever',
-      age: '2 anos',
-      gender: 'Macho',
-      size: 'Grande',
-      temperament: ['Carinhoso', 'Brincalhão', 'Sociável'],
-      location: 'São Paulo, SP',
-      description: 'Buddy é um golden retriever muito carinhoso que adora crianças e outros animais. Ele é super brincalhão e seria perfeito para uma família ativa.',
-      image: sampleDog,
-      vaccinated: true,
-      neutered: true,
-      contact: 'Maria Silva'
-    },
-    {
-      id: 2,
-      name: 'Luna',
-      type: 'Gato',
-      breed: 'SRD (Laranja)',
-      age: '1 ano',
-      gender: 'Fêmea',
-      size: 'Médio',
-      temperament: ['Independente', 'Carinhosa', 'Calma'],
-      location: 'Rio de Janeiro, RJ',
-      description: 'Luna é uma gatinha muito especial. Apesar de independente, é extremamente carinhosa com quem conquista sua confiança. Perfeita para apartamentos.',
-      image: sampleCat,
-      vaccinated: true,
-      neutered: true,
-      contact: 'João Santos'
-    },
-    {
-      id: 3,
-      name: 'Thor',
-      type: 'Cão',
-      breed: 'Pastor Alemão',
-      age: '3 anos',
-      gender: 'Macho',
-      size: 'Grande',
-      temperament: ['Protetor', 'Leal', 'Inteligente'],
-      location: 'Belo Horizonte, MG',
-      description: 'Thor é um pastor alemão muito inteligente e protetor. Ideal para famílias que buscam um companheiro leal e guardião.',
-      image: sampleDog,
-      vaccinated: true,
-      neutered: false,
-      contact: 'Ana Costa'
-    },
-    {
-      id: 4,
-      name: 'Mimi',
-      type: 'Gato',
-      breed: 'Siamês',
-      age: '6 meses',
-      gender: 'Fêmea',
-      size: 'Pequeno',
-      temperament: ['Brincalhona', 'Curiosa', 'Vocal'],
-      location: 'Porto Alegre, RS',
-      description: 'Mimi é uma gatinha siamesa super brincalhona e curiosa. Ela adora explorar e é muito comunicativa. Perfeita para quem gosta de gatos ativos.',
-      image: sampleCat,
-      vaccinated: true,
-      neutered: false,
-      contact: 'Pedro Lima'
-    },
-  ];
+  useEffect(() => {
+    const fetchPets = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('pets')
+          .select('*')
+          .eq('is_available', true)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        setPets(data || []);
+      } catch (error) {
+        console.error('Error fetching pets:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPets();
+  }, []);
 
   const filteredPets = pets.filter(pet => {
     return (
@@ -165,69 +138,98 @@ const Adotar = () => {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredPets.map((pet) => (
-              <Card key={pet.id} className="group overflow-hidden border-0 shadow-soft hover:shadow-medium transition-all duration-300 hover:scale-105 bg-card/50 backdrop-blur">
-                <div className="aspect-square overflow-hidden relative">
-                  <img 
-                    src={pet.image} 
-                    alt={pet.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute top-4 right-4">
-                    <Badge variant="secondary" className="bg-white/90 text-foreground">
-                      {pet.type}
-                    </Badge>
-                  </div>
-                  <div className="absolute top-4 left-4 flex gap-2">
-                    {pet.vaccinated && (
-                      <Badge className="bg-pet-secondary text-white">Vacinado</Badge>
+          {loading ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[...Array(6)].map((_, i) => (
+                <Card key={i} className="overflow-hidden animate-pulse">
+                  <div className="aspect-square bg-muted"></div>
+                  <CardContent className="p-6 space-y-4">
+                    <div className="h-6 bg-muted rounded w-3/4"></div>
+                    <div className="h-4 bg-muted rounded w-full"></div>
+                    <div className="h-4 bg-muted rounded w-2/3"></div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredPets.map((pet) => (
+                <Card key={pet.id} className="group overflow-hidden border-0 shadow-soft hover:shadow-medium transition-all duration-300 hover:scale-105 bg-card/50 backdrop-blur">
+                  <div className="aspect-square overflow-hidden relative">
+                    {pet.image_url ? (
+                      <img 
+                        src={pet.image_url} 
+                        alt={pet.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-muted flex items-center justify-center text-muted-foreground">
+                        Sem foto
+                      </div>
                     )}
-                    {pet.neutered && (
-                      <Badge className="bg-pet-primary text-white">Castrado</Badge>
-                    )}
+                    <div className="absolute top-4 right-4">
+                      <Badge variant="secondary" className="bg-white/90 text-foreground">
+                        {pet.type}
+                      </Badge>
+                    </div>
+                    <div className="absolute top-4 left-4 flex gap-2">
+                      {pet.vaccinated && (
+                        <Badge className="bg-pet-secondary text-white">Vacinado</Badge>
+                      )}
+                      {pet.neutered && (
+                        <Badge className="bg-pet-primary text-white">Castrado</Badge>
+                      )}
+                    </div>
                   </div>
-                </div>
-                
-                <CardContent className="p-6 space-y-4">
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-xl font-semibold">{pet.name}</h3>
-                      <Button size="sm" variant="ghost" className="p-2 hover:bg-pet-love/20">
-                        <Heart className="w-4 h-4" />
+                  
+                  <CardContent className="p-6 space-y-4">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-xl font-semibold">{pet.name}</h3>
+                        <Button size="sm" variant="ghost" className="p-2 hover:bg-pet-love/20">
+                          <Heart className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <p className="text-primary font-medium">{pet.breed} • {pet.age} • {pet.gender}</p>
+                      <div className="flex items-center text-muted-foreground text-sm">
+                        <MapPin className="w-4 h-4 mr-1" />
+                        {pet.location}
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-wrap gap-2">
+                      {pet.temperament.slice(0, 3).map((trait, index) => (
+                        <Badge key={index} variant="outline" className="text-xs">
+                          {trait}
+                        </Badge>
+                      ))}
+                    </div>
+                    
+                    <p className="text-muted-foreground text-sm line-clamp-2">
+                      {pet.description}
+                    </p>
+                    
+                    <div className="flex gap-2">
+                      <Button 
+                        className="flex-1"
+                        onClick={() => navigate(`/pet/${pet.id}`)}
+                      >
+                        Ver Detalhes
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="px-3"
+                        onClick={() => navigate(`/pet/${pet.id}`)}
+                      >
+                        <MessageCircle className="w-4 h-4" />
                       </Button>
                     </div>
-                    <p className="text-primary font-medium">{pet.breed} • {pet.age} • {pet.gender}</p>
-                    <div className="flex items-center text-muted-foreground text-sm">
-                      <MapPin className="w-4 h-4 mr-1" />
-                      {pet.location}
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-wrap gap-2">
-                    {pet.temperament.slice(0, 3).map((trait, index) => (
-                      <Badge key={index} variant="outline" className="text-xs">
-                        {trait}
-                      </Badge>
-                    ))}
-                  </div>
-                  
-                  <p className="text-muted-foreground text-sm line-clamp-2">
-                    {pet.description}
-                  </p>
-                  
-                  <div className="flex gap-2">
-                    <Button className="flex-1">
-                      Ver Detalhes
-                    </Button>
-                    <Button variant="outline" size="sm" className="px-3">
-                      <MessageCircle className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
           
           {filteredPets.length === 0 && (
             <div className="text-center py-16 space-y-6">

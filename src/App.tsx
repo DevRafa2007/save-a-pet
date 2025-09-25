@@ -14,6 +14,8 @@ import Blog from "./pages/Blog";
 import FAQ from "./pages/FAQ";
 import Contato from "./pages/Contato";
 import Auth from "./pages/Auth";
+import PetDetails from "./pages/PetDetails";
+import Chat from "./pages/Chat";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "@/components/ScrollToTop";
 
@@ -45,6 +47,12 @@ const App = () => (
             <Route path="/blog" element={<Blog />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/contato" element={<Contato />} />
+            <Route path="/pet/:id" element={<PetDetails />} />
+            <Route path="/chat/:id" element={
+              <ProtectedRoute>
+                <Chat />
+              </ProtectedRoute>
+            } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

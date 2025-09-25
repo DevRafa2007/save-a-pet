@@ -14,6 +14,162 @@ export type Database = {
   }
   public: {
     Tables: {
+      chats: {
+        Row: {
+          created_at: string
+          id: string
+          interested_user_id: string
+          pet_id: string
+          pet_owner_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          interested_user_id: string
+          pet_id: string
+          pet_owner_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          interested_user_id?: string
+          pet_id?: string
+          pet_owner_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chats_interested_user_id_fkey"
+            columns: ["interested_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chats_pet_id_fkey"
+            columns: ["pet_id"]
+            isOneToOne: false
+            referencedRelation: "pets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chats_pet_owner_id_fkey"
+            columns: ["pet_owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          chat_id: string
+          content: string
+          created_at: string
+          id: string
+          sender_id: string
+        }
+        Insert: {
+          chat_id: string
+          content: string
+          created_at?: string
+          id?: string
+          sender_id: string
+        }
+        Update: {
+          chat_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_chat_id_fkey"
+            columns: ["chat_id"]
+            isOneToOne: false
+            referencedRelation: "chats"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pets: {
+        Row: {
+          age: string
+          breed: string
+          created_at: string
+          description: string
+          gender: string
+          id: string
+          image_url: string | null
+          is_available: boolean
+          location: string
+          name: string
+          neutered: boolean
+          size: string
+          temperament: string[]
+          type: string
+          updated_at: string
+          user_id: string
+          vaccinated: boolean
+        }
+        Insert: {
+          age: string
+          breed: string
+          created_at?: string
+          description: string
+          gender: string
+          id?: string
+          image_url?: string | null
+          is_available?: boolean
+          location: string
+          name: string
+          neutered?: boolean
+          size: string
+          temperament?: string[]
+          type: string
+          updated_at?: string
+          user_id: string
+          vaccinated?: boolean
+        }
+        Update: {
+          age?: string
+          breed?: string
+          created_at?: string
+          description?: string
+          gender?: string
+          id?: string
+          image_url?: string | null
+          is_available?: boolean
+          location?: string
+          name?: string
+          neutered?: boolean
+          size?: string
+          temperament?: string[]
+          type?: string
+          updated_at?: string
+          user_id?: string
+          vaccinated?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pets_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
