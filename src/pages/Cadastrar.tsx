@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { buscarEnderecoPorCEP } from '@/integrations/supabase/geocode';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
@@ -30,7 +31,13 @@ const Cadastrar = () => {
     description: '',
     medicalHistory: '',
     specialNeeds: '',
+    cep: '',
+    bairro: '',
+    cidade: '',
+    estado: '',
     location: '',
+    latitude: 0,
+    longitude: 0,
     contactName: '',
     contactPhone: '',
     contactEmail: '',
@@ -46,6 +53,43 @@ const Cadastrar = () => {
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleCepSearch = async (cep: string) => {
+    if (cep.length !== 8) return;
+
+    try {
+      const resultado = await buscarEnderecoPorCEP(cep);
+      
+      if (resultado) {
+        setFormData(prev => ({
+          ...prev,
+          bairro: resultado.bairro,
+          cidade: resultado.cidade,
+          estado: resultado.estado,
+          location: resultado.endereco_completo,
+          latitude: resultado.coordenadas.lat,
+          longitude: resultado.coordenadas.lng,
+        }));
+
+        toast({
+          title: "Endereço encontrado!",
+          description: "Os campos foram preenchidos automaticamente.",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "CEP não encontrado",
+          description: "Verifique se o CEP está correto.",
+        });
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Erro ao buscar CEP",
+        description: "Ocorreu um erro ao buscar o endereço.",
+      });
+    }
   };
 
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -135,6 +179,11 @@ const Cadastrar = () => {
       image_url: photos[0],
       vaccinated: formData.vaccinated,
       neutered: formData.neutered,
+      cep: formData.cep,
+      bairro: formData.bairro,
+      cidade: formData.cidade,
+      estado: formData.estado,
+      coordenadas: `(${formData.latitude || 0}, ${formData.longitude || 0})`,
     };
 
     const { error } = await supabase.from('pets').insert([petData]);
@@ -275,6 +324,61 @@ const Cadastrar = () => {
                         onChange={(e) => handleInputChange('weight', e.target.value)}
                         placeholder="Ex: 25kg"
                       />
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label htmlFor="cep">CEP *</Label>
+                        <Input
+                          id="cep"
+                          value={formData.cep}
+                          onChange={(e) => {
+                            const cep = e.target.value.replace(/\D/g, '');
+                            handleInputChange('cep', cep);
+                            if (cep.length === 8) {
+                              handleCepSearch(cep);
+                            }
+                          }}
+                          placeholder="Digite o CEP (somente números)"
+                          maxLength={8}
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="bairro">Bairro</Label>
+                        <Input
+                          id="bairro"
+                          value={formData.bairro}
+                          onChange={(e) => handleInputChange('bairro', e.target.value)}
+                          placeholder="Bairro"
+                          readOnly
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label htmlFor="cidade">Cidade</Label>
+                        <Input
+                          id="cidade"
+                          value={formData.cidade}
+                          onChange={(e) => handleInputChange('cidade', e.target.value)}
+                          placeholder="Cidade"
+                          readOnly
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="estado">Estado</Label>
+                        <Input
+                          id="estado"
+                          value={formData.estado}
+                          onChange={(e) => handleInputChange('estado', e.target.value)}
+                          placeholder="Estado"
+                          readOnly
+                        />
+                      </div>
                     </div>
                   </div>
                 </CardContent>

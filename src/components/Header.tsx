@@ -34,7 +34,7 @@ const Header = () => {
   ];
 
   const userNavLinks = user ? [{ to: '/meus-pets', label: 'Meus Pets' }] : [];
-  const navLinks = [...userNavLinks, ...baseNavLinks];
+  const navLinks = [...baseNavLinks, ...userNavLinks];
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
