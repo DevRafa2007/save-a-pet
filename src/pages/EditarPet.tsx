@@ -15,6 +15,22 @@ import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
+interface Pet {
+  id: string;
+  name: string;
+  type: string;
+  breed: string;
+  age: string;
+  gender: string;
+  size: string;
+  weight: string;
+  description: string;
+  vaccinated: boolean;
+  neutered: boolean;
+  image_url: string;
+  temperament: string[];
+}
+
 const EditarPet = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -23,7 +39,7 @@ const EditarPet = () => {
   const [loading, setLoading] = useState(true);
   const [photo, setPhoto] = useState<string | null>(null);
   const [temperaments, setTemperaments] = useState<string[]>([]);
-  const [formData, setFormData] = useState<any>(null);
+  const [formData, setFormData] = useState<Pet | null>(null);
 
   useEffect(() => {
     const fetchPetData = async () => {
@@ -67,7 +83,7 @@ const EditarPet = () => {
   }, [id, user, navigate, toast]);
 
   const handleInputChange = (field: string, value: string | boolean) => {
-    setFormData((prev: any) => ({ ...prev, [field]: value }));
+    setFormData((prev) => (prev ? { ...prev, [field]: value } : null));
   };
 
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,9 +129,9 @@ const EditarPet = () => {
     };
 
     // Remove unnecessary fields before update
-    delete petData.profiles;
-    delete petData.created_at;
-    delete petData.updated_at;
+    delete (petData as any).profiles;
+    delete (petData as any).created_at;
+    delete (petData as any).updated_at;
 
     const { error } = await supabase.from('pets').update(petData).eq('id', id);
 
@@ -353,8 +369,8 @@ const EditarPet = () => {
                       <div key={item.key} className="flex items-center space-x-2">
                         <Checkbox
                           id={item.key}
-                          checked={formData[item.key as keyof typeof formData] as boolean}
-                          onCheckedChange={(checked) => handleInputChange(item.key, checked)}
+                          checked={formData[item.key as keyof Pet] as boolean}
+                          onCheckedChange={(checked) => handleInputChange(item.key, !!checked)}
                         />
                         <Label htmlFor={item.key}>{item.label}</Label>
                       </div>

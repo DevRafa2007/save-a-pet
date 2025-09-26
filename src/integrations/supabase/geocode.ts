@@ -1,5 +1,5 @@
 // Sua chave da API do Google Maps
-export const API_KEY: string = "AIzaSyAEAbvnvSD_eKroEztl_1wXtwqOcv-S8lQ";
+export const API_KEY: string = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 // Interface para os componentes de endereço da resposta da API
 export interface AddressComponent {
