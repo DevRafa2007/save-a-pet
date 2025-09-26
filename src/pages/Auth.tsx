@@ -51,7 +51,7 @@ const Auth = () => {
         title: "Cadastro realizado!",
         description: "Verifique seu email para confirmar sua conta.",
       });
-    } catch (error: any) {
+    } catch (error: { message: string }) {
       toast({
         title: "Erro no cadastro",
         description: error.message,
@@ -79,7 +79,7 @@ const Auth = () => {
         description: "Bem-vindo de volta!",
       });
       navigate('/adotar');
-    } catch (error: any) {
+    } catch (error: { message: string }) {
       toast({
         title: "Erro no login",
         description: error.message,

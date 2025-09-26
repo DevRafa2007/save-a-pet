@@ -119,19 +119,21 @@ const EditarPet = () => {
     const genderMap: { [key: string]: string } = { male: 'Macho', female: 'Fêmea' };
     const sizeMap: { [key: string]: string } = { small: 'Pequeno', medium: 'Médio', large: 'Grande' };
 
-    const petData = {
-      ...formData,
+    const petData: Pet = {
+      id: formData.id,
+      name: formData.name,
       type: typeMap[formData.type] || formData.type,
+      breed: formData.breed,
+      age: formData.age,
       gender: genderMap[formData.gender] || formData.gender,
       size: sizeMap[formData.size] || formData.size,
+      weight: formData.weight,
+      description: formData.description,
+      vaccinated: formData.vaccinated,
+      neutered: formData.neutered,
+      image_url: photo || '',
       temperament: temperaments,
-      image_url: photo,
     };
-
-    // Remove unnecessary fields before update
-    delete (petData as any).profiles;
-    delete (petData as any).created_at;
-    delete (petData as any).updated_at;
 
     const { error } = await supabase.from('pets').update(petData).eq('id', id);
 
