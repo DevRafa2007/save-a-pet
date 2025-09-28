@@ -69,14 +69,16 @@ const Footer = () => {
             <div className="flex gap-4">
               {[
                 { icon: Facebook, href: '#', label: 'Facebook' },
-                { icon: Instagram, href: '#', label: 'Instagram' },
-                { icon: Twitter, href: '#', label: 'Twitter' },
+                { icon: Instagram, href: 'https://www.instagram.com/saveapet2025/', label: 'Instagram' },
+                { icon: Twitter, href: 'https://x.com/saveapet2025', label: 'Twitter' },
               ].map(({ icon: Icon, href, label }) => (
                 <a
                   key={label}
                   href={href}
                   className="w-10 h-10 bg-primary/10 hover:bg-primary hover:text-white rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110"
                   aria-label={label}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <Icon className="w-5 h-5" />
                 </a>
