@@ -36,8 +36,6 @@ const Cadastrar = () => {
     cidade: '',
     estado: '',
     location: '',
-    latitude: 0,
-    longitude: 0,
     contactName: '',
     contactPhone: '',
     contactEmail: '',
@@ -68,8 +66,6 @@ const Cadastrar = () => {
           cidade: resultado.cidade,
           estado: resultado.estado,
           location: resultado.endereco_completo,
-          latitude: resultado.coordenadas.lat,
-          longitude: resultado.coordenadas.lng,
         }));
 
         toast({
@@ -183,7 +179,6 @@ const Cadastrar = () => {
       bairro: formData.bairro,
       cidade: formData.cidade,
       estado: formData.estado,
-      coordenadas: `(${formData.latitude || 0}, ${formData.longitude || 0})`,
     };
 
     const { error } = await supabase.from('pets').insert([petData]);
