@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Heart, LogOut, User, PawPrint } from 'lucide-react';
+import { Menu, X, Heart, LogOut, User, PawPrint, MessageCircle } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 
 const Header = () => {
@@ -72,6 +72,15 @@ const Header = () => {
           <div className="hidden lg:flex items-center gap-4">
             {user ? (
               <>
+                <Button 
+                  variant="ghost" 
+                  onClick={() => navigate('/chat')} 
+                  title="Meus Chats"
+                  className="transition-all duration-300"
+                >
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  Chats
+                </Button>
                 <Button variant="outline" onClick={() => handleAuthAction('login')} className="transition-all duration-300 hover:shadow-medium">
                   <Heart className="w-4 h-4 mr-2" />
                   Adotar Pet
@@ -126,6 +135,13 @@ const Header = () => {
               <div className="flex flex-col gap-3 mt-4 border-t pt-4">
                 {user ? (
                   <>
+                    <Button 
+                      variant="outline"
+                      onClick={() => { navigate('/chat'); setIsMenuOpen(false); }}
+                    >
+                      <MessageCircle className="w-4 h-4 mr-2" />
+                      Meus Chats
+                    </Button>
                      <Button variant="outline" onClick={() => { handleAuthAction('login'); setIsMenuOpen(false); }}>
                       <Heart className="w-4 h-4 mr-2" />
                       Adotar Pet

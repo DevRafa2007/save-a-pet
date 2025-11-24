@@ -16,6 +16,7 @@ import Contato from "./pages/Contato";
 import Auth from "./pages/Auth";
 import PetDetails from "./pages/PetDetails";
 import Chat from "./pages/Chat";
+import ChatInbox from "./pages/ChatInbox";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "@/components/ScrollToTop";
 import MeusPets from "./pages/MeusPets";
@@ -60,6 +61,11 @@ const App = () => (
             <Route path="/faq" element={<FAQ />} />
             <Route path="/contato" element={<Contato />} />
             <Route path="/pet/:id" element={<PetDetails />} />
+            <Route path="/chat" element={
+              <ProtectedRoute>
+                <ChatInbox />
+              </ProtectedRoute>
+            } />
             <Route path="/chat/:id" element={
               <ProtectedRoute>
                 <Chat />

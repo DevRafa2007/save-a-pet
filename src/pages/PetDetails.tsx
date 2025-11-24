@@ -98,33 +98,13 @@ const PetDetails = () => {
     }
 
     try {
-      // Check if chat already exists
-      const { data: existingChat } = await supabase
-        .from('chats')
-        .select('id')
-        .eq('pet_id', pet.id)
-        .eq('interested_user_id', user.id)
-        .single();
-
-      if (existingChat) {
-        navigate(`/chat/${existingChat.id}`);
-        return;
-      }
-
-      // Create new chat
-      const { data: newChat, error } = await supabase
-        .from('chats')
-        .insert({
-          pet_id: pet.id,
-          pet_owner_id: pet.user_id,
-          interested_user_id: user.id,
-        })
-        .select('id')
-        .single();
-
-      if (error) throw error;
-
-      navigate(`/chat/${newChat.id}`);
+      const { default: ChatService } = await import('@/integrations/supabase/chatService');
+      const chatId = await ChatService.getOrCreateChat(
+        pet.id,
+        pet.user_id,
+        user.id
+      );
+      navigate(`/chat/${chatId}`);
     } catch (error) {
       console.error('Error creating chat:', error);
       toast({
@@ -253,12 +233,16 @@ const PetDetails = () => {
             <Card>
               <CardContent className="p-4">
                 <h3 className="font-semibold mb-3">Informações do Anunciante</h3>
-                <div className="space-y-2 text-sm">
-                  <p><span className="font-medium">Nome:</span> {pet.profiles.full_name}</p>
-                  {pet.profiles.phone && (
-                    <p><span className="font-medium">Telefone:</span> {pet.profiles.phone}</p>
-                  )}
-                </div>
+                {pet.profiles ? (
+                  <div className="space-y-2 text-sm">
+                    <p><span className="font-medium">Nome:</span> {pet.profiles.full_name}</p>
+                    {pet.profiles.phone && (
+                      <p><span className="font-medium">Telefone:</span> {pet.profiles.phone}</p>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground">Informações do anunciante não disponíveis</p>
+                )}
               </CardContent>
             </Card>
 
